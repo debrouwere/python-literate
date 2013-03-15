@@ -1,56 +1,112 @@
-./literate untangle examples/basic examples/basic/build --template examples/basic/template.html --formats py md html --capture
+Literate helps you author reproducible HTML reports from Python. Integrate Python code and Markdown documentation in `.pylit` files (or `.py.md` if you prefer.) Literate will capture the output of your code and weave it in with your thoughts and the code itself.
 
-Literate is a tiny tool that allows you to create prose documents interweaved with code, and 
-display the output of that code alongside documentation and code itself.
+    Here's what a `.pylit` document can look like:
 
-Write your document in Markdown, and within the document, simply indent your code with four spaces or a tab.
+        numbers = [1, 2, 3]
+        print [float(number * 3) for number in numbers]
+        first, middle, last = numbers
 
-Literate can also execute the code within your documents and capture the output, which 
-is great for research notebooks, and akin to IPython notebooks, R Markdown, Sweave and Pweave.
+    And then we can write more, and talk about our calculations 
+    like {first} and {last}.
 
-Process both .pylit and .py.md (literate python) and .md.py (python with docstrings)
+Indented text is Python. Non-indented text is Markdown. You can use any 
+variables from Python in Markdown, and they will be interpolated like 
+you're used to from regular Python string formatting.
 
-Allow people to specify whether they want to include output
-(notebook mode) or not (regular literate programming), and whether to include code 
-or just run it and make its state available for as variables (documentation mode)
+We can run that through Literate with the command:
 
-literate run <file>                execute
-literate untangle <file/folder>    output to .py and .md
-    --template                     also output to HTML, using a template HTML file
-    --formats                      any combination of py,md,html
+    ./literate untangle myreport.pylit --capture --print
 
-Somewhat hackish at the moment, but it does work.
+Or save it to somewhere:
 
-If you do `import literate` in your code, it'll import .pylit files like regular Python files.
-(Warning: it usually does this by creating .pyc files with the same name as your literate
-python file, but if you have a .py file with the same name as your .pyc file, it'll 
-override that file as well. Don't create independent myproj.pylit and myproj.py files!)
+    ./literate untangle ./myreport.pylit ./build --capture
 
-Intersplice the markdown into a template (if specified on the CLI): replace <article/>
+The output will look like: 
 
-Variables can be used in the markdown, using the familiar {var} syntax you know from Python
-string formatting.
+> Here's what a `.pylit` document can look like:
+> 
+> > numbers = [1, 2, 3]
+> > print [float(number * 3) for number in numbers]
+> > first, middle, last = numbers
+> > > [3.0, 6.0, 9.0]
+> 
+> And then we can write more, and talk about our calculations 
+> like 1 and 3.
 
-Otherwise just output to .md and .py, which people can then use however they want (e.g. in Jekyll)
+If you want to capture output (like in the example above), pass the `--capture` flag
+to the command line interface. It's great for research notebooks, and akin to 
+IPython notebooks, R Markdown, Sweave and Pweave.
 
-Dependencies: markdown
+For regular literate programming (just code and your explanations of that code)
+simply leave off the `--capture` flag: it's what Literate does by default.
 
-TODO
-----
+## The command-line interface
 
-TODO: finish up the CLI.
+To find out more about how to use the command-line interface, try: 
 
-Literate Python should also work with docstrings in regular Python files if that's more your cup of tea.
-(I suppose the catch is that the one works with Python out of the box, the other works with Markdown
-out of the box...)
+    ./literate untangle --help
+    ./literate run --help
 
-TODO: inlining matplotlib figures would be nice too -- perhaps an extensible architecture that 
-makes it easy to 'special-case' certain buffered output (and not just convert to __repr__); 
-ideally we'd want something like this for d3 plots as well
+## Working with Literate Python files
 
-TODO: make a really nice Hector template (routes, css, js, html) that works well with 
-our .md output, and explain how you can go from pylit --> md --> documentation site 
-(ideally you'd have these as steps in your Drakefile, BPipe, Fabric, whatever)
+The Python interpreter doesn't understand Literate Python by default, but that's easily fixed: 
 
-It's not `literate`'s job to provide a full html rendering framework. That's why so many 
-documentation generators are a mess.
+    # add support for importing Literate Python
+    # and then import our `myreport.pylit` file
+    # like a regular Python source file
+    import literate
+    import myreport
+
+Just like `.py` files generate `.pyc` bytecode, `.pylit` files sometimes generate 
+a `.py` representation. Running `literate untangle myreport.pylit` or doing 
+`import myreport` produces a `myreport.py` file.
+
+**Never put source code in, or edit, a `.py` file if there's a `.pylit` file 
+with the same basename. It may be overwritten and you will lose whatever code 
+you had in your `.py` file.**
+
+## Output formats
+
+Literate can output to `.py`, `.md` and `.html`. HTML output is very useful for simple reports.
+
+    ./literate untangle examples/basic examples/basic/build \
+        --template examples/basic/template.html \
+        --formats html \
+        --capture
+
+There's a very basic HTML template built into Literate, but you can also use your own.
+Use the `--template` flag, e.g. `--template mytemplate.html`. Your template file should
+contain a `<article/>` tag, which is where Literate will put your generated report.
+
+For finer control over layout and report rendering, use the Markdown output (`--formats md`) which 
+will contain code, documentation and captured output. With those Markdown files, build your own 
+reports using the site generator of your choice. Jekyll's a good one.
+
+## Does it do...
+
+Literate Python is inspired on Literate CoffeeScript rather than the traditional Sweave syntax.
+You won't get fine-grained control over which individual chunk to run or display because I 
+don't believe that's how literate reports should work.
+
+Don't include code in a `.pylit` file you don't want in the generated output but instead 
+put it in library files , it's as simple as that.
+
+## Roadmap
+
+* fix './' (which should be the CWD, not the dir of the literate script)
+* Actually build in that basic HTML template the documentation says exists
+* Support for `.md.py` (Python with Markdown docstrings) 
+  (I suppose the catch is that the one works with Python out of the box, 
+  the other works with Markdown out of the box...)
+* Support for `matplotlib` plots
+  (Perhaps an extensible architecture that makes it easy to 'special-case' 
+  certain buffered output (and not just convert to __repr__)
+* Support for D3 plots, tables and other visualizations
+* A documentation mode that runs your code, doesn't capture the output but 
+  does make its state available as variables for interpolation
+* Polish up the code
+* Make a really nice Hector template (routes, css, js, html) or Jekyll template 
+  that works well with our .md output, and explain how you can go from 
+  pylit --> md --> documentation site 
+  (ideally you'd have these as steps in your Drakefile, BPipe, Fabric, whatever)
+* Put the code up on PyPI.
