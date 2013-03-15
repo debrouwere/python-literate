@@ -9,14 +9,12 @@ p {
 }
 
 blockquote, pre {
-    margin: 0 0 1em -1.5em;
-    padding: 0.2em 0 0.2em 1em;
-    font-size: 16px;
-    border-left: 0.5em solid #ddd;
+    margin: 0 0 1em 0;
 }
 
 blockquote p, code {
     font-family: monaco, courier;
+    font-size: 14px;
 }
 
 code {
@@ -29,5 +27,6 @@ blockquote p {
 
 pre + blockquote {
     margin-top: -1em;
-    border-left-color: #aaa;
+    padding: 0.5em;
+    background: #cfcfcf;
 }
