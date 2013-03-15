@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+
+import sys
+import argparse
+import parser
+import loader
+
+
+# patch the `import` statement so it can handle literate python
+loader.patch()
+
+
+def untangle(options):
+    # TODO: support file directories
+    locations = [options.location]
+
+    for location in locations:
+        if ('html' in options.formats) or options.template:
+            if options.template:
+                src = open(location).read()
+                template = open(options.template).read()
+                body = parser.html(src, run=True)
+                body = "<article>{}</article>".format(body)
+                print template.replace('<article/>', body)
+            else:
+                raise ValueError("Can't output to HTML without a template.")
+
+        if 'py' in options.formats:
+            pass
+
+        if 'md' in options.formats:
+            pass
+
+
+def run(path):
+    f = open(path).read()
+    parser.python(f, run=True)
+
+
+# TODO: also allow people to specify an output dir / output file name
+# TODO: allow people to disable showing output in notebooks
+def cli():
+    parser = argparse.ArgumentParser(description='create HTML notebooks out of literate python scripts')
+    subparsers = parser.add_subparsers(help='sub-command help')
+    cli_run = subparsers.add_parser('run', help='run help')
+    cli_run.set_defaults(func=run)
+    cli_run.add_argument('location', nargs='+')
+    cli_untangle = subparsers.add_parser('untangle', help='untangle help')
+    cli_untangle.set_defaults(func=untangle)
+    cli_untangle.add_argument('location', default='./', nargs='?')
+    cli_untangle.add_argument('--template', dest='template', help='sum the integers (default: find the max)')
+    cli_untangle.add_argument('--formats', dest='formats', default=['md', 'py'], nargs='*', help="what formats you'd like to output")
+    args = parser.parse_args()
+    args.func(args)
+
+
+if __name__ == '__main__':
+    cli()

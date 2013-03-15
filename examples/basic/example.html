@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <link rel='stylesheet' href='literate.css' />
+    </head>
+    <body>
+        <h1>Literate Python</h1>
+        <article><p>This is a Literate Python document. Non-indented text is regular <strong>Markdown</strong>, 
+but indented text is Python. For example: </p>
+
+<pre><code>l = [1, 2, 3]
+print [float(el*3) for el in l]
+x = l[0]
+</code></pre>
+<blockquote>
+<p>[3.0, 6.0, 9.0] <br />
+</p>
+</blockquote>
+
+<p>And then we can write more.</p>
+<p>And more still.</p>
+
+<pre><code>print "But continue with some Python"
+
+v = " ".join(['If we', 'care to'])
+print v
+</code></pre>
+<blockquote>
+<p>But continue with some Python <br />
+If we care to   </p>
+</blockquote>
+
+
+
+<pre><code>print "And two lines if we want to split up contiguous Python samples"
+</code></pre>
+<blockquote>
+<p>And two lines if we want to split up contiguous Python samples <br />
+</p>
+</blockquote>
+
+<p>We can also include variables, like <code>x</code> (valued <strong>1</strong>) from a couple of blocks back.</p>
+<p>If it can be stringified, we'll print it: [1, 2, 3]</p>
+<p>And <em>that's</em> what Literate Python is all about. It's a really nice tool for 
+data analysis, scientific notebooks, documentation and what-not.</p></article>
+    </body>
+</html>
