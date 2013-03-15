@@ -1,0 +1,41 @@
+This is a Literate Python document. Non-indented text is regular **Markdown**, 
+but indented text is Python. For example: 
+
+
+    l = [1, 2, 3]
+    print [float(el*3) for el in l]
+    x = l[0]
+    
+
+> [3.0, 6.0, 9.0]   
+> 
+
+And then we can write more.
+
+And more still.
+
+
+    print "But continue with some Python"
+    
+    v = " ".join(['If we', 'care to'])
+    print v
+    
+
+> But continue with some Python   
+> If we care to   
+> 
+
+
+
+    print "And two lines if we want to split up contiguous Python samples"
+    
+
+> And two lines if we want to split up contiguous Python samples   
+> 
+
+We can also include variables, like `x` (valued **1**) from a couple of blocks back.
+
+If it can be stringified, we'll print it: [1, 2, 3]
+
+And _that's_ what Literate Python is all about. It's a really nice tool for 
+data analysis, scientific notebooks, documentation and what-not.

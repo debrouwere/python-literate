@@ -1,4 +1,4 @@
-./literate examples/basic/example.pylit examples/basic/tpl.html > examples/basic/example.html
+./literate untangle examples/basic examples/basic/build --template examples/basic/template.html --formats py md html --capture
 
 Literate is a tiny tool that allows you to create prose documents interweaved with code, and 
 display the output of that code alongside documentation and code itself.

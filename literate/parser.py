@@ -55,18 +55,22 @@ class Chunk(object):
     def text(self):
         return "\n".join(self.lines)
 
-    @property
-    def html(self):
-        return md.markdown(self.markdown)
+    def html(self, run):
+        return md.markdown(self.markdown(run))
 
-    @property
-    def markdown(self):
+    def markdown(self, run):
         if self.kind == 'markdown':
-            return self.text.format(**self.variables)
+            if run:
+                return self.text.format(**self.variables)
+            else:
+                return self.text
         else:
             code = pad(self.text, '    ')
-            output = pad(br(self.parse()), '> ')
-            return "\n\n".join([code, output])
+            if run:
+                output = pad(br(self.parse()), '> ')
+                return "\n\n".join([code, output])
+            else:
+                return code
 
     def __repr__(self):
         return "<{kind} [{lines}]>".format(kind=self.kind, lines=len(self.raw))
@@ -106,15 +110,15 @@ def untangle(string, run=False):
 
 
 def markdown(string, run=False):
-    chunks = [chunk.markdown for chunk in untangle(string, run)]
+    chunks = [chunk.markdown(run) for chunk in untangle(string, run)]
     return u"\n\n".join(chunks)
 
 def html(string, run=False):
-    chunks = [chunk.html for chunk in untangle(string)]
+    chunks = [chunk.html(run) for chunk in untangle(string, run)]
     return u"\n\n".join(chunks)
 
 def python(string, run=False):
-    chunks = untangle(string)
+    chunks = untangle(string, run)
     code = u"\n\n".join([chunk.text for chunk in chunks if chunk.kind is 'python'])
     if run:
         exec code

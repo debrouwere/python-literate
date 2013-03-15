@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 
-import sys
+import os
 import argparse
 import parser
 import loader
@@ -12,26 +12,59 @@ import loader
 loader.patch()
 
 
+def find(location):
+    if os.path.isfile(location):
+        return [location]
+    elif os.path.isdir(location):
+        ls = []
+        for root, dirs, files in os.walk('./'):
+            ls.extend([os.path.join(root, file) for file in files])
+        return [file for file in ls if os.path.splitext(file)[1] in loader.EXTENSIONS]
+    else:
+        raise ValueError("Need a directory or a file.")
+
+def out(output, dest, stdout):
+    if stdout:
+        print output
+    else:
+        try:
+            os.makedirs(os.path.dirname(dest))
+        except OSError:
+            pass
+
+        with open(dest, 'w') as f:
+            f.write(output)
+
 def untangle(options):
-    # TODO: support file directories
-    locations = [options.location]
+    locations = find(options.src)
 
     for location in locations:
-        if ('html' in options.formats) or options.template:
-            if options.template:
-                src = open(location).read()
-                template = open(options.template).read()
-                body = parser.html(src, run=True)
-                body = "<article>{}</article>".format(body)
-                print template.replace('<article/>', body)
-            else:
+        src = open(location).read()
+        
+        if options.dest:
+            base = os.path.splitext(os.path.basename(location))[0]
+            dest = os.path.join(options.dest, base)
+        else:
+            dest = os.path.splitext(location)[0]
+
+        if ('html' in options.formats) and options.template:
+            if not options.template:
                 raise ValueError("Can't output to HTML without a template.")
 
+            template = open(options.template).read()
+            body = parser.html(src, run=options.capture)
+            body = "<article>{}</article>".format(body)
+
+            output = template.replace('<article/>', body)
+            out(output, dest + '.html', options.stdout)
+
         if 'py' in options.formats:
-            pass
+            output = parser.python(src, run=False)
+            out(output, dest + '.py', options.stdout)
 
         if 'md' in options.formats:
-            pass
+            output = parser.markdown(src, run=options.capture)
+            out(output, dest + '.md', options.stdout)
 
 
 def run(path):
@@ -41,20 +74,24 @@ def run(path):
 
 # TODO: also allow people to specify an output dir / output file name
 # TODO: allow people to disable showing output in notebooks
-def cli():
+def command():
     parser = argparse.ArgumentParser(description='create HTML notebooks out of literate python scripts')
     subparsers = parser.add_subparsers(help='sub-command help')
     cli_run = subparsers.add_parser('run', help='run help')
     cli_run.set_defaults(func=run)
-    cli_run.add_argument('location', nargs='+')
+    cli_run.add_argument('src', nargs=1)
     cli_untangle = subparsers.add_parser('untangle', help='untangle help')
     cli_untangle.set_defaults(func=untangle)
-    cli_untangle.add_argument('location', default='./', nargs='?')
-    cli_untangle.add_argument('--template', dest='template', help='sum the integers (default: find the max)')
-    cli_untangle.add_argument('--formats', dest='formats', default=['md', 'py'], nargs='*', help="what formats you'd like to output")
+    cli_untangle.add_argument('src', default='./', nargs='?')
+    cli_untangle.add_argument('dest', default=None, nargs='?')
+    cli_untangle.add_argument('-t', '--template', dest='template', help='sum the integers (default: find the max)')
+    cli_untangle.add_argument('-f', '--formats', dest='formats', default=['md', 'py'], nargs='*', help="what formats you'd like to output")
+    cli_untangle.add_argument('-p', '--print', dest='stdout', default=False, action='store_true', help="print to stdout?")    
+    cli_untangle.add_argument('-c', '--capture', dest='capture', default=False, action='store_true', help="Run the Python code and capture output")    
+    cli_untangle.add_argument('-r', '--recursive', dest='recursive', default=False, action='store_true', help="look for files in subdirectories as well?") 
     args = parser.parse_args()
     args.func(args)
 
 
 if __name__ == '__main__':
-    cli()
+    command()
