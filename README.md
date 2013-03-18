@@ -94,13 +94,16 @@ put it in library files , it's as simple as that.
 ## Roadmap
 
 * fix './' (which should be the CWD, not the dir of the literate script)
+* tests
 * A Sublime Text syntax highlighter
 * Support for `.md.py` (Python with Markdown docstrings) 
   (I suppose the catch is that the one works with Python out of the box, 
   the other works with Markdown out of the box...)
+* Also, when using the Literate style, add Markdown to the Python output
+  in docstrings.
 * Support for `matplotlib` plots
-  (Perhaps an extensible architecture that makes it easy to 'special-case' 
-  certain buffered output (and not just convert to __repr__)
+  (Perhaps an extensible architecture that makes it easy to hook in to
+  certain kinds of output when eval'ing expression by expression)
 * Support for D3 plots, tables and other visualizations
 * Showing the code (and/or results) should be orthogonal to running the code.
   There's need for a documentation mode that runs your code and makes its state
@@ -111,4 +114,5 @@ put it in library files , it's as simple as that.
   that works well with our .md output, and explain how you can go from 
   pylit --> md --> documentation site 
   (ideally you'd have these as steps in your Drakefile, BPipe, Fabric, whatever)
+* Two-column docco/pycco-style documentation would be nice too
 * Put the code up on PyPI.
