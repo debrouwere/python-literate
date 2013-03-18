@@ -76,7 +76,17 @@ class Chunk(object):
         return "<{kind} [{lines}]>".format(kind=self.kind, lines=len(self.raw))
 
 
-def untangle(string, run=False):
+def untangle_docstrings(string, run=False):
+    superchunks = string.strip().split('"""')
+    chunks = []
+
+    for i, superchunk in enumerate(superchunks):
+        pass
+
+    raise NotImplementedError()
+
+
+def untangle_literate(string, run=False):
     lines = string.strip().split('\n')
     chunks = []
 
@@ -107,6 +117,24 @@ def untangle(string, run=False):
             variables.update(chunk.variables)
 
     return chunks
+
+
+def untangle(string, run=False):
+    return untangle_literate(string, run)
+
+
+def pair(chunks):
+    """
+    Return matched pairs of (python, markdown) chunks, creating empty chunks 
+    if necessary.
+    
+    This is useful for two-column layouts with documentation on the left and 
+    code on the right.
+
+    (Python on the left hand of the pair so we can parse the chunks in-order
+    and have the Python state available to the accompanying documentation.)
+    """
+    raise NotImplementedError()
 
 
 def markdown(string, run=False):
