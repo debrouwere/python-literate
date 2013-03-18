@@ -53,6 +53,9 @@ def out(output, dest, stdout):
         with open(dest, 'w') as f:
             f.write(output)
 
+
+# TODO: all of this stuff should be in a submodule!
+
 def untangle(options):
     locations = find(options.src)
     template = options.template
@@ -106,11 +109,11 @@ def command():
     cli_untangle.set_defaults(func=untangle)
     cli_untangle.add_argument('src', default='./', nargs='?', help='source file or directory')
     cli_untangle.add_argument('dest', default=None, nargs='?', help='destination file or directory')
-    cli_untangle.add_argument('-t', '--template', dest='template', default='./template', help='pass a custom HTML template')
-    cli_untangle.add_argument('-f', '--formats', dest='formats', default=['md', 'py', 'html'], nargs='*', help="what formats you'd like to output")
+    cli_untangle.add_argument('-t', '--template', default='./template', help='pass a custom HTML template')
+    cli_untangle.add_argument('-f', '--formats', default=['md', 'py', 'html'], nargs='*', help="what formats you'd like to output")
     cli_untangle.add_argument('-p', '--print', dest='stdout', default=False, action='store_true', help="print to stdout (only useful when you've selected a single output format)")    
-    cli_untangle.add_argument('-c', '--capture', dest='capture', default=False, action='store_true', help="run Python code and capture the output")    
-    cli_untangle.add_argument('-r', '--recursive', dest='recursive', default=False, action='store_true', help="look for .pylit files in any subdirectory") 
+    cli_untangle.add_argument('-c', '--capture', default=False, action='store_true', help="run Python code and capture the output")    
+    cli_untangle.add_argument('-r', '--recursive', default=False, action='store_true', help="look for .pylit files in any subdirectory") 
     args = parser.parse_args()
     args.func(args)
 
