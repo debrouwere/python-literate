@@ -99,6 +99,39 @@ def run(path):
     parser.python(f, run=True)
 
 
+"""
+TODO: figure out a better name than "untangle"
+while it describes the process, it doesn't describe 
+the fact that the Markdown and HTML files are rendered
+results, not just a part of the original .pylit we 
+extracted. `render` comes closer, but also not quite.
+`run` doesn't have the connotation of generating output
+
+noweb has `notangle` (produce code) and `noweave` (produce documentation)
+(so you can do notangle myliterate.py | xargs python)
+Sweave similarly has tangle and weave commands.
+
+`unweave` perhaps has a more physical connotation than `untangle`.
+Or perhaps it's really "untangling" (the code) but "weaving together" (a report).
+
+If `untangle` produced any Markdown, to be consistent with the metaphor
+it should give you the raw thing, either without any code (.md.py) or with the code unrun (.pylit)
+
+And if we want to give `literate` the option to run your code through Python, 
+maybe don't have a subcommand but just 
+
+    literate code.pylit
+
+or perhaps (if having it all as subcommands is more elegant)
+
+    literate python code.pylit
+
+and
+
+    literate weave code.pylit --formats md html
+
+and I don't think we really need a command that does both at the same time.
+"""
 def command():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()

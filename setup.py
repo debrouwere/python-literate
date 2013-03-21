@@ -23,6 +23,11 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-    ]
+    ], 
+    entry_points = {
+          'console_scripts': [
+                'literate = literate.command',
+          ],
+    },
 )
 
