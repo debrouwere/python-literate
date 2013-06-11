@@ -8,13 +8,11 @@
         <div class="code">
         {% for chunk in block.code %}
             <blockquote class="source">
-                <code>
-                    <pre>{{ chunk.text }}</pre>
-                </code>
+                <pre><code>{{ chunk.text }}</code></pre>
             </blockquote>
             {% if chunk.output %}
             <blockquote class="output">
-                {{ chunk.output }}
+                <pre>{{ chunk.output }}</pre>
             </blockquote>
             {% endif %}
         {% endfor %}

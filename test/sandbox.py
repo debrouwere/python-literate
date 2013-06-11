@@ -11,6 +11,9 @@ def weave():
     blocks = literate.parser.weave(ex, simplify=True)
     print literate.renderer.content(blocks)
 
+def package():
+    literate.renderer.package('examples/basic', 'examples/basic/build')
+
 ret = globals()[sys.argv[1]]()
 if ret:
     pprint(ret)
