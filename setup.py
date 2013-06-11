@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from literate import VERSION
 
 
-f = open(os.path.join(os.path.dirname(__file__), 'README'))
+f = open(os.path.join(os.path.dirname(__file__), 'README.md'))
 readme = f.read()
 f.close()
 
@@ -20,7 +20,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
     ], 

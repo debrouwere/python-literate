@@ -6,7 +6,9 @@
         <script>hljs.initHighlightingOnLoad();</script>
     </head>
     <body>
-        <h1>Literate Python</h1>
-        <article/>
+        <h1>{{ title }}</h1>
+        <article>
+            {% include 'content.html' %}
+        </article>
     </body>
 </html>

@@ -28,7 +28,7 @@ The output will look like:
 > > numbers = [1, 2, 3]
 > > print [float(number * 3) for number in numbers]
 > > first, middle, last = numbers
-> > > [3.0, 6.0, 9.0]
+> > `[3.0, 6.0, 9.0]`
 > 
 > And then we can write more, and talk about our calculations 
 > like 1 and 3.
@@ -89,30 +89,43 @@ You won't get fine-grained control over which individual chunk to run or display
 don't believe that's how literate reports should work.
 
 Don't include code in a `.pylit` file you don't want in the generated output but instead 
-put it in library files , it's as simple as that.
+put it in library files, it's as simple as that.
 
 ## Roadmap
 
+### 1.0rc
+
 * fix './' (which should be the CWD, not the dir of the literate script)
 * tests
+* Also, when using the Literate style, add Markdown to the Python output
+  in docstrings.
+* Python output hooks
+  - initial support for `matplotlib` plots
+* different weaving and untangling modes
+  weave
+  - literate (code + interpolated documentation)
+  - --prose (interpolated documentation)
+  - --notebook (code + output + interpolated documentation)
+  untangle (--formats)
+  - md
+  - py
+* Make it possible to pass on woven files to a templating language executable
+  Ideally: `literate weave . --template jade --object {context} --output build`
+  (with {context} and {contextFile} variables)
+* A good default template
+  - dynamic one-column / two-column
+  - works on directories (includes a TOC)
+* Review code and put it up on PyPI
+
+### Other
+
 * A Sublime Text syntax highlighter
+
+### Future
+
+* Support for plain text (may make it easier for people who 
+  want to use formats other than those we support to DIY)
+* Support for D3 plots, tables and other visualizations
 * Support for `.md.py` (Python with Markdown docstrings) 
   (I suppose the catch is that the one works with Python out of the box, 
   the other works with Markdown out of the box...)
-* Also, when using the Literate style, add Markdown to the Python output
-  in docstrings.
-* Support for `matplotlib` plots
-  (Perhaps an extensible architecture that makes it easy to hook in to
-  certain kinds of output when eval'ing expression by expression)
-* Support for D3 plots, tables and other visualizations
-* Showing the code (and/or results) should be orthogonal to running the code.
-  There's need for a documentation mode that runs your code and makes its state
-  available as variables for interpolation, regardless of whether it includes
-  the code itself in the output.
-* Polish up the code
-* Make a really nice Hector template (routes, css, js, html) or Jekyll template 
-  that works well with our .md output, and explain how you can go from 
-  pylit --> md --> documentation site 
-  (ideally you'd have these as steps in your Drakefile, BPipe, Fabric, whatever)
-* Two-column docco/pycco-style documentation would be nice too
-* Put the code up on PyPI.

@@ -1,0 +1,16 @@
+!!! 5
+html
+    head
+        title
+        link(rel='stylesheet', href='assets/literate.styl')
+        script(src='/vendor/jquery/1.9.1/jquery.min.js')
+        script(src='assets/literate.coffee')
+    body
+        h1= current[0]
+        table
+            - each row in rows
+                tr
+                    td
+                        div= row[0]
+                        div= row[1]
+                    td= row[2]

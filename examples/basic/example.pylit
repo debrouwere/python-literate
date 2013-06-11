@@ -1,4 +1,9 @@
-This is a Literate Python document. Non-indented text is regular **Markdown**, 
+# Literate Python example
+
+This is a Literate Python document.
+
+
+Non-indented text is regular **Markdown**, 
 but indented text is Python. For example: 
 
     l = [1, 2, 3]

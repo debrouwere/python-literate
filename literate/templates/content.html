@@ -1,0 +1,23 @@
+{% for block in blocks %}
+    <div class="block">
+        <div class="prose">
+        {% for chunk in block.prose %}
+            {{ chunk.html }}
+        {% endfor %}
+        </div>
+        <div class="code">
+        {% for chunk in block.code %}
+            <blockquote class="source">
+                <code>
+                    <pre>{{ chunk.text }}</pre>
+                </code>
+            </blockquote>
+            {% if chunk.output %}
+            <blockquote class="output">
+                {{ chunk.output }}
+            </blockquote>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+{% endfor %}
