@@ -26,7 +26,7 @@ setup(
     ], 
     entry_points = {
           'console_scripts': [
-                'literate = literate.command',
+                'literate = literate.commands:initialize', 
           ],
     },
 )

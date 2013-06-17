@@ -1,0 +1,70 @@
+@font-face
+    font-family: 'novecento-bold'
+    src: url('../vendor/fonts/novecento-bold.eot')
+    src: url('../vendor/fonts/novecento-bold.eot?#iefix') format('embedded-opentype')
+    src: url('../vendor/fonts/novecento-bold.woff') format('woff')
+    src: url('../vendor/fonts/novecento-bold.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
+
+h1, h2, h3
+    font-family: 'novecento-bold'
+    font-weight: normal
+
+body
+    background: white
+    width: 720px
+    margin: 20px auto
+    font-family: palatino, helvetica, arial, serif
+
+p
+    font-size: 18px
+    line-height: 1.4
+
+blockquote, pre
+    margin: 0 0 0 0
+
+blockquote.source, blockquote.output
+    padding: 0.6em
+
+div.code
+    box-shadow: 0 0 10px #ddd inset
+
+    pre, pre code
+        font-family: monaco
+        font-size: 12px
+
+    blockquote.source
+        &, code
+            background: rgba(255, 255, 255, 0.2)
+
+        border-left: 2px solid #ccc
+
+pre code
+    padding: 0
+
+blockquote p
+    margin: 0
+
+div.code blockquote.output
+    font-size: 14px
+    background: rgba(0, 0, 0, 0.075)
+    border-left: 2px solid #999
+
+body.parallel
+    background: #fff
+    width: 960px
+
+    div.block
+        float: left
+        margin-bottom: 20px
+
+        div
+            float: left
+
+        div.prose
+            width: 400px
+            margin-right: 20px
+
+        div.code
+            width: 540px

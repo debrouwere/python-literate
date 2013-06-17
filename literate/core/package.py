@@ -1,15 +1,9 @@
-import renderer as render
+import templates, utils, parser
 import fs
 
-def package(src, dest):
-    src = fs.File(src)
-    dest = fs.Directory(dest)
-
-    # find literate python files
-    if src.is_file:
-        documents = [src]
-    else:
-        documents = fs.Directory(src.path).find('*.pylit')
+def create(dest):
+    if isinstance(dest, basestring):
+        dest = fs.Directory(dest)
 
     # create or clear destination
     if dest.exists:
@@ -17,14 +11,7 @@ def package(src, dest):
     dest.create()
 
     # copy over assets
-    assets = fs.Directory(utils.here('templates/assets'))
+    assets = fs.Directory(utils.here('../build/resources'))
     assets.copy(dest, root=True)
-
-    # weave literate python
-    for doc in documents:
-        raw = doc.read()
-        blocks = parser.weave(raw)
-        html = render.document(doc.name, blocks)
-        filename = doc.name + '.html'
-        f = fs.File(dest.path, filename)
-        f.write(html)
+    vendor = fs.Directory(utils.here('../vendor'))
+    vendor.copy(fs.Directory(dest.path, 'resources'), root=True)

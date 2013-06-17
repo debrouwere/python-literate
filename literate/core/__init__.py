@@ -1,3 +1,1 @@
-def run(path):
-    f = open(path).read()
-    parser.python(f, run=True)
+import interceptor, loader, parser, templates, utils, package

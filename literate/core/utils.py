@@ -1,7 +1,12 @@
 import os
 import shutil
+import re
 from copy import copy
 
+def line(string, **kwargs):
+    string = string.format(**kwargs)
+    string = re.sub(r'\n+', ' ', string)
+    return re.sub(r'\s{2,}', ' ', string)
 
 def here(*segments):
     current = os.path.dirname(__file__)

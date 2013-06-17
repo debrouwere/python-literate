@@ -9,9 +9,9 @@ def content(blocks):
     template = environment.get_template('content.html')
     return template.render(blocks=blocks)
 
-def document(title, blocks, toc=None):
+def document(title, blocks, **options):
     template = environment.get_template('document.html')
-    return template.render(title=title, blocks=blocks, toc=toc)
+    return template.render(title=title, blocks=blocks, options=options)
 
 def pipe():
     raise NotImplementedError()

@@ -110,7 +110,14 @@ class MarkdownChunk(Chunk):
     # w/ {type, raw, html, output}
     def markdown(self, run=True):
         if run:
-            return self.text.format(**self.variables)
+            try:
+                return self.text.format(**self.variables)
+            except KeyError, name:
+                raise KeyError(utils.line("""
+                    You referenced {name} in your literate document, 
+                    but no such variable was found. Did you enable 
+                    code evaluation?".format(name=name))
+                    """, name=name))
         else:
             return self.text
 
@@ -118,9 +125,9 @@ class MarkdownChunk(Chunk):
     def serialize(self):
         return {
             'type': self.name, 
-            'raw': self.text,
-            'html': self.html(True),
-            'output': False,
+            'raw': self.text, 
+            'html': self.html(True), 
+            'output': False, 
         }
 
 class Document(object):
@@ -164,6 +171,10 @@ class Document(object):
             types[chunk.name] += chunk.text + '\n'
 
         return types
+
+    def run(self):
+        code = self.untangle()['python']
+        exec code
 
     def __init__(self, raw):
         self.raw = raw
@@ -228,3 +239,7 @@ def weave(string, evaluate=True, simplify=True):
 def untangle(string):
     document = LiterateDocument(string)
     return document.untangle()
+
+def run(string):
+    document = LiterateDocument(string)
+    document.run()
